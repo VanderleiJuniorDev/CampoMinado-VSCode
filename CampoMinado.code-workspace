@@ -1,0 +1,85 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "java.project.sourcePaths": [
+            "src"
+        ],
+        "java.project.outputPath": "bin",
+        "java.project.referencedLibraries": [
+            "lib/**/*.jar"
+        ],
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "java.compile.nullAnalysis.mode": "disabled",
+        "files.encoding": "utf8",
+        "files.exclude": {
+            "**/*.class": true
+        },
+        "editor.formatOnSave": false,
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "type": "java",
+                "name": "Campo Minado (Interface Gráfica)",
+                "request": "launch",
+                "mainClass": "main.JogoCampoMinadoGUI",
+                "vmArgs": "-Dfile.encoding=UTF-8"
+            },
+            {
+                "type": "java",
+                "name": "Campo Minado (Console)",
+                "request": "launch",
+                "mainClass": "main.JogoCampoMinado",
+                "console": "integratedTerminal",
+                "vmArgs": "-Dfile.encoding=UTF-8"
+            }
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Compilar jogo",
+                "type": "shell",
+                "windows": {
+                    "command": "powershell",
+                    "args": [
+                        "-NoProfile",
+                        "-Command",
+                        "New-Item -ItemType Directory -Force bin | Out-Null; $arquivos = Get-ChildItem -Recurse src -Filter *.java | Where-Object { $_.FullName -notmatch '\\\\test\\\\' } | ForEach-Object { $_.FullName }; javac -encoding UTF-8 -d bin $arquivos"
+                    ]
+                },
+                "linux": {
+                    "command": "mkdir -p bin && javac -encoding UTF-8 -d bin $(find src -name '*.java' -not -path 'src/test/*')"
+                },
+                "osx": {
+                    "command": "mkdir -p bin && javac -encoding UTF-8 -d bin $(find src -name '*.java' -not -path 'src/test/*')"
+                },
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                },
+                "problemMatcher": "$javac"
+            },
+            {
+                "label": "Executar jogo",
+                "type": "shell",
+                "command": "java -Dfile.encoding=UTF-8 -cp bin main.JogoCampoMinadoGUI",
+                "dependsOn": "Compilar jogo",
+                "problemMatcher": []
+            }
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            "vscjava.vscode-java-pack"
+        ]
+    }
+}
